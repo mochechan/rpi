@@ -3,6 +3,7 @@ successful IRDA
 voice control:  http://www.raspberrypi.org/meet-jasper-open-source-voice-computing/
 TTS: http://elinux.org/RPi_Text_to_Speech_(Speech_Synthesis)
 to write to log files only if status changes
+to countdown with seconds
 //to read all gpio status by using gpio readall 
 to query all significient events 
 to startup automatically (/etc/rc.local is now fail)
@@ -10,6 +11,11 @@ to startup automatically (/etc/rc.local is now fail)
 //to shutdown -r now when disconnected for a long time
 //to auto-off relay in predefined period
 */
+
+console.log(global);
+console.log(process);
+console.log(module);
+
 
 // list of argv
 process.argv.forEach(function (val, index, array) {
