@@ -1,4 +1,5 @@
 /* todo:
+sockjs version
 successful IRDA 
 voice control:  http://www.raspberrypi.org/meet-jasper-open-source-voice-computing/
 TTS: http://elinux.org/RPi_Text_to_Speech_(Speech_Synthesis)

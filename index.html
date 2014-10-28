@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>sockjs RPI 繁體中文</title>
+  </head>
+  <body onload="bodyOnLoad()">
+    <code id="status" style="font-size:28px">connectivity status</code></br>
+    <code id="status-sensors" style="font-size:32px">sensor-status</code></br>
+
+
+    <span id="btnGroup2" style="font-size:90px">
+    <dfn id="fan" onclick="relay1(this)">fan</dfn>
+    <strong id="button3" onclick="relay1on(this)">ON</strong>
+    <strong id="button4" onclick="relay1off(this)">OFF</strong>
+    <strong id="relay1countdown" onclick="relay1setTime(this)">[0]</strong>
+    </br>
+    <dfn id="lamp" onclick="relay2(this)">lamp</dfn>
+    <strong id="button6" onclick="relay2on(this)">ON</strong>
+    <strong id="button7" onclick="relay2off(this)">OFF</strong>
+    <strong id="relay2countdown" onclick="relay2setTime(this)">[0]</strong>
+    </span>
+
+    </br>
+    <p id="debug">for debug</p>
+
+    <textarea id="chat-content" style="width:400px;height:400px"></textarea><br/>
+    <input type="text" id="username" name="" value="" placeholder="Choose username"/>
+    <input type="text" id="message" name="" value="" placeholder="Enter chat message"/>
+    <input type="button" id="send" name="" value="Send" onclick="sendMessage()"/>
+    </br>
+
+    <span id="btnGroup1" style="font-size:45px;">
+    <strong id="button1" onclick="button1(this)">Button1按鈕一</strong>
+    <strong id="button2" onclick="button2(this)">Button2按鈕二</strong>
+    </span>
+    </br>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script>
+
+
+/*todo: 
+clean message onload()
+to attempt refresh socket connection if socket is lost
+MRTG for humidity and temperature 
+auto-scale by screen size
+*/
+
+
+function refreshPage(){
+  document.getElementById("debug").innerHTML = "x:" + window.innerWidth + " y:" + window.innerHeight + " " + document.documentElement.clientWidth;
+  //document.getElementById("btnGroup2").style.fontSize = (window.innerWidth/11) + "px";
+  document.getElementById("chat-content").style.width = (window.innerWidth-100) + "px";
+}
+
+
+// Create a connection to http://localhost:9999/echo
+var sock = new SockJS('/echo');
+
+// Open the connection
+sock.onopen = function() {
+  console.log('sock open');
+};
+
+// On connection close
+sock.onclose = function() {
+  console.log('sock close');
+  document.getElementById("status").innerHTML = "disconnected";
+  document.getElementById("status-sensors").innerHTML = "disconnected";
+  //window.location.reload();
+};
+
+// On receive message from server
+sock.onmessage = function(e) {
+  // Get the content
+  var content = JSON.parse(e.data);
+
+  if (content.timestamp)
+    document.getElementById("status").innerHTML = content.timestamp;
+
+  if (content.temperature)
+    document.getElementById("status-sensors").innerHTML = "Humidity:" + content.humidity + "%; Temperature:" + content.temperature + "&deg;C";
+
+  if (content.relay1 === "on") {
+    document.getElementById("button3").style.backgroundColor = "yellow";
+    document.getElementById("button4").style.backgroundColor = "white";
+  } else if (content.relay1 === "off") {
+    document.getElementById("button3").style.backgroundColor = "white";
+    document.getElementById("button4").style.backgroundColor = "yellow";
+  }
+
+  if (content.relay2 === "on") {
+    document.getElementById("button6").style.backgroundColor = "yellow";
+    document.getElementById("button7").style.backgroundColor = "white";
+  }else if (content.relay2 === "off") {
+    document.getElementById("button6").style.backgroundColor = "white";
+    document.getElementById("button7").style.backgroundColor = "yellow";
+  }
+
+  if (content.relay1countdown > 1)
+    document.getElementById("relay1countdown").innerHTML = "[" + Math.floor(content.relay1countdown/60) + ":" + (content.relay1countdown % 60) + "]";
+  else if (content.relay1countdown == 0)
+    document.getElementById("relay1countdown").innerHTML = "[0]";
+  
+  if (content.relay2countdown > 1)
+    document.getElementById("relay2countdown").innerHTML = "[" + Math.floor(content.relay2countdown/60) + ":" + (content.relay2countdown % 60) + "]";
+  else if (content.relay2countdown == 0)
+    document.getElementById("relay2countdown").innerHTML = "[0]";
+
+  // Append the text to text area (using jQuery)
+  if (content.username)
+    $('#chat-content').val(function(i, text){
+      //return text + 'User ' + content.username + ': ' + content.message + '\n';
+      return text + JSON.stringify(content) + '\n';
+    });
+  var log = document.getElementById("chat-content");
+  log.scrollTop = log.scrollHeight;
+  
+  if (content.command === 'clean-chat-message') 
+    $('#chat-content').val(function(i, text){return "";});
+    
+};
+
+// Function for sending the message to server
+function sendMessage(){
+  // Get the content from the textbox
+  var message = $('#message').val();
+  var username = $('#username').val();
+
+  // The object to send
+  var send = {
+    message: message,
+    username: username
+  };
+
+  // Send it now
+  sock.send(JSON.stringify(send));
+
+  $('#message').val(function(i, text){return "";});
+}
+
+function bodyOnLoad(){
+  refreshPage();
+  $('#chat-content').val(function(i, text){
+    return "";
+  });
+}
+
+function button1(d) {
+  d.style.color = "red";
+  $('#chat-content').val(function(i, text){
+    return "";
+  });
+}
+
+function button2(d) {
+  d.style.color = "red";
+  sock.send(JSON.stringify({require: "require1"}));
+}
+
+function relay1(d) {
+  sock.send(JSON.stringify({request:"relay1mode"}));
+}
+
+function relay2(d) {
+  sock.send(JSON.stringify({request:"relay2mode"}));
+}
+
+function relay1on(d) {
+  document.getElementById("button3").style.color = "red";
+  document.getElementById("button4").style.color = "black";
+  sock.send(JSON.stringify({request:"relay1on"}));
+}
+
+
+function relay1off(d) {
+  document.getElementById("button3").style.color = "black";
+  document.getElementById("button4").style.color = "red";
+  sock.send(JSON.stringify({request:"relay1off"}));
+}
+
+function relay1setTime(d) {
+  sock.send(JSON.stringify({request:"relay1countdown"}));
+}
+
+function relay2on(d) {
+  document.getElementById("button6").style.color = "red";
+  document.getElementById("button7").style.color = "black";
+  sock.send(JSON.stringify({request:"relay2on"}));
+}
+
+function relay2off(d) {
+  document.getElementById("button6").style.color = "black";
+  document.getElementById("button7").style.color = "red";
+  sock.send(JSON.stringify({request:"relay2off"}));
+}
+
+function relay2setTime(d) {
+  sock.send(JSON.stringify({request:"relay2countdown"}));
+}
+
+</script>
+  </body>
+</html>

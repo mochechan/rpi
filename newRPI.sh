@@ -2,13 +2,12 @@
 # for Raspberry PI updated: 20140923 
 cat /proc/version
 cat /proc/cpuinfo
-echo please run this manually before running this script: sudo raspi-config # Expand Filesystem and reboot
+echo please run sudo raspi-config manually before running this script.  Expand Filesystem and reboot
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade 
 
-sudo apt-get -y install vim screen git nodejs npm git-core lirc
-
+sudo apt-get -y install vim screen git nodejs npm git-core lirc rtorrent
 
 #sudo apt-get -y install python-pip 
 #sudo pip install pibrella
