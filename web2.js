@@ -1,4 +1,5 @@
 /* todo:
+
 save server and clients' ip addresses
 relay1 supports temperature and countdown mode
 auto open/close window with step motor

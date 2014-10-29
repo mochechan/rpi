@@ -62,32 +62,7 @@ function refreshPage(){
 
 var counter = 0;
 
-var recInterval = null;
-var socket = null;
 
-var new_conn = function() {    
-    sock = new SockJS( '/echo', null, {
-        'protocols_whitelist': ['websocket', 'xdr-streaming', 'xhr-streaming', 
-                                'iframe-eventsource', 'iframe-htmlfile', 
-                                'xdr-polling', 'xhr-polling', 'iframe-xhr-polling',
-                                'jsonp-polling']
-    });
-
-    sock.onopen = function () {
-        clearInterval(recInterval);
-    };  
-
-    sock.onclose = function () {    
-        recInterval = setInterval(function () {
-  document.getElementById("debug2").innerHTML = counter++;
-            //new_conn();
-        }, 2000);
-    };
-};
-new_conn();
-
-
-/*
 // Create a connection to http://localhost:9999/echo
 var sock = new SockJS('/echo');
 
@@ -103,7 +78,6 @@ sock.onclose = function() {
   document.getElementById("status-sensors").innerHTML = "disconnected";
   //window.location.reload();
 };
-*/
 
 // On receive message from server
 sock.onmessage = function(e) {
