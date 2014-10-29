@@ -23,3 +23,5 @@ git pull origin
 gpio -v
 gpio readall
 
+
+# http://www.raywenderlich.com/44918/raspberry-pi-airplay-tutorial

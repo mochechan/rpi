@@ -1,17 +1,15 @@
 /* todo:
+save server and clients' ip addresses
 relay1 supports temperature and countdown mode
+auto open/close window with step motor
 PIR hardware adjust
-successful IRDA 
+successful AC IRDA 
 voice control:  http://www.raspberrypi.org/meet-jasper-open-source-voice-computing/
 TTS: http://elinux.org/RPi_Text_to_Speech_(Speech_Synthesis)
-to write to log files only if status changes
-to countdown with seconds
-//to read all gpio status by using gpio readall 
 to query all significient events 
 to startup automatically (/etc/rc.local is now fail)
-//to exec gpio at once to save CPU loading
 //to shutdown -r now when disconnected for a long time
-//to auto-off relay in predefined period
+client can control by command line with username=control message=predefined
 */
 
 console.log(global);
@@ -33,16 +31,14 @@ var node_static = require('node-static'); // for index.html
 
 var status = {};
 status.relay1countdown = status.relay2countdown = 0;
-status.internetConnectSucc = status.internetConnectFail = 0;
+status.internetSuccess = status.internetFailure = 0;
 
 // Clients list
 var clients = {};
 
 // Broadcast to all clients
 function broadcast(message){
-  // iterate through each client in clients object
   for (var client in clients){
-    // send the message to that client
     clients[client].write(JSON.stringify(message));
   }
 }
@@ -53,8 +49,7 @@ var echo = sockjs.createServer();
 
 // on new connection event
 echo.on('connection', function(conn) {
-  console.log("conn ");
-  console.log(conn);
+  console.log(conn.remoteAddress + ":" + conn.remotePort + " " + conn.headers.host);
 
   // add this client to clients object
   console.log("on connection " + conn.id );
@@ -117,7 +112,7 @@ echo.installHandlers(server, {prefix:'/echo'});
 // Start server
 server.listen(8080, '0.0.0.0');
 
-// to read humidity and temperature periodically
+// 1) to read humidity and temperature periodically 2) check Internet connectivity
 status.counter2 =0;
 status.missed =0;
 setInterval(function() {
@@ -150,9 +145,9 @@ setInterval(function() {
 
   exec("ping -c 1 google.com ", function(error, stdout, stderr){
     if(error || stderr){
-      status.internetConnectFail++;
+      status.internetFailure++;
     } else {
-      status.internetConnectSucc++;
+      status.internetSuccess++;
     } 
   });
 
@@ -192,10 +187,9 @@ setInterval(function(){
     status.relay2countdown--;
     if (status.relay2gpio === '1') relay2on();
     else if (status.relay2gpio === '0') relay2off();
-    else {}
-  } else {}
+    else {console.log("error:190");}
+  } else {console.log("error:191");}
 
-  var reply ={};
   status.username = "system";
   status.timestamp = (new Date) + " #" + Object.keys(clients).length;
 
@@ -273,12 +267,16 @@ var clone = function (obj) {
 
 
 // to write a LOG file
-var prevStatus = {}; //
+var prevStatus = {}; // previous status
 var fs = require('fs');
 var LOG = function (obj) {
-  if ( status.relay1 === prevStatus.relay1 && status.relay2 === prevStatus.relay2 && status.relay1mode === prevStatus.relay1mode
-    && status.PIR === prevStatus.PIR && status.flame === prevStatus.flame 
-    && status.humidity === prevStatus.humidity && status.temperature === prevStatus.temperature ) {
+  if ( status.relay1 === prevStatus.relay1 
+    && status.relay2 === prevStatus.relay2 
+    && status.relay1mode === prevStatus.relay1mode
+    && status.PIR === prevStatus.PIR 
+    && status.flame === prevStatus.flame 
+    && status.humidity === prevStatus.humidity 
+    && status.temperature === prevStatus.temperature ) {
   } else {
     prevStatus = clone(status);
     var string = JSON.stringify(obj);

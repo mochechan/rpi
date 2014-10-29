@@ -1,0 +1,54 @@
+
+# Please make this file available to others
+# by sending it to <lirc@bartelmus.de>
+#
+# this config file was automatically generated
+# using lirc-0.9.0-pre1(default) on Wed Aug  6 20:29:54 2014
+#
+# contributed by 
+#
+# brand:                       lircd.txt
+# model no. of remote control: 
+# devices being controlled by this remote:
+#
+
+begin remote
+
+  name  lircd.txt
+  flags RAW_CODES
+  eps            30
+  aeps          100
+
+  gap          8186
+
+      begin raw_codes
+
+          name BTN_Z
+             4679    2397     370     830     370    2052
+              332    2077     339    2075     301     898
+              341     861     332    2090     360     840
+              342     859     342     856     373     828
+              373     829     299     900     341     897
+              302     865     363     880     294    2082
+              338    2078     367    2045     371    2048
+              372     825     373     829     342     857
+              339     873     344    2071     334     866
+              380    2037     339     860     369     830
+              342     857     370     832     370
+
+          name BTN_Y
+             4685    2399     340     858     339    2085
+              360    2058     361    2047     363     837
+              328     873     334    2085     363     844
+              336     866     326     862     370     828
+              341     860     341     864     332     866
+              338     861     339     870     333    2080
+              342    2075     337    2078     369    2041
+              370     834     337     864     337     862
+              302     913     334    2078     369    2046
+              368     833     340     861     301     898
+              349     849     339     863     336
+
+      end raw_codes
+
+end remote

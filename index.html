@@ -19,10 +19,15 @@
     <strong id="button6" onclick="relay2on(this)">ON</strong>
     <strong id="button7" onclick="relay2off(this)">OFF</strong>
     <strong id="relay2countdown" onclick="relay2setTime(this)">[0]</strong>
+    </br>
+    <dfn id="ac" onclick="ac(this)">ac</dfn>
+    <strong id="ac_on" onclick="ac_on(this)">ON</strong>
+    <strong id="ac_off" onclick="ac_off(this)">OFF</strong>
     </span>
 
     </br>
     <p id="debug">for debug</p>
+    <p id="debug2">for debug</p>
 
     <textarea id="chat-content" style="width:400px;height:400px"></textarea><br/>
     <input type="text" id="username" name="" value="" placeholder="Choose username"/>
@@ -42,12 +47,12 @@
 
 
 /*todo: 
-clean message onload()
 to attempt refresh socket connection if socket is lost
 MRTG for humidity and temperature 
 auto-scale by screen size
-*/
 
+security token mechanism
+*/
 
 function refreshPage(){
   document.getElementById("debug").innerHTML = "x:" + window.innerWidth + " y:" + window.innerHeight + " " + document.documentElement.clientWidth;
@@ -55,7 +60,34 @@ function refreshPage(){
   document.getElementById("chat-content").style.width = (window.innerWidth-100) + "px";
 }
 
+var counter = 0;
 
+var recInterval = null;
+var socket = null;
+
+var new_conn = function() {    
+    sock = new SockJS( '/echo', null, {
+        'protocols_whitelist': ['websocket', 'xdr-streaming', 'xhr-streaming', 
+                                'iframe-eventsource', 'iframe-htmlfile', 
+                                'xdr-polling', 'xhr-polling', 'iframe-xhr-polling',
+                                'jsonp-polling']
+    });
+
+    sock.onopen = function () {
+        clearInterval(recInterval);
+    };  
+
+    sock.onclose = function () {    
+        recInterval = setInterval(function () {
+  document.getElementById("debug2").innerHTML = counter++;
+            //new_conn();
+        }, 2000);
+    };
+};
+new_conn();
+
+
+/*
 // Create a connection to http://localhost:9999/echo
 var sock = new SockJS('/echo');
 
@@ -71,6 +103,7 @@ sock.onclose = function() {
   document.getElementById("status-sensors").innerHTML = "disconnected";
   //window.location.reload();
 };
+*/
 
 // On receive message from server
 sock.onmessage = function(e) {
