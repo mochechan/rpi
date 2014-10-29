@@ -1,5 +1,5 @@
 #!/bin/bash
-# for Raspberry PI updated: 20140923 
+# for Raspberry PI updated: 201411 
 cat /proc/version
 cat /proc/cpuinfo
 echo please run sudo raspi-config manually before running this script.  Expand Filesystem and reboot
@@ -23,5 +23,9 @@ git pull origin
 gpio -v
 gpio readall
 
-
+exit 0;
 # http://www.raywenderlich.com/44918/raspberry-pi-airplay-tutorial
+# http://raspberryalphaomega.org.uk/2014/06/11/installing-and-using-node-js-on-raspberry-pi/
+# http://node-arm.herokuapp.com/
+# version of nodejs installed by apt-get is too old 
+
