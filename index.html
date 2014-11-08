@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8"/>
-    <title>sockjs RPI 繁體中文</title>
-  </head>
+  <head> <meta charset="UTF-8"/> <title>sockjs RPI 繁體中文</title> </head>
   <body onload="bodyOnLoad()">
     <code id="status" style="font-size:28px">connectivity status</code></br>
     <code id="status-sensors" style="font-size:32px">sensor-status</code></br>
@@ -61,9 +58,13 @@
 to attempt refresh socket connection if socket is lost
 MRTG for humidity and temperature 
 auto-scale by screen size
-
+ping server every 10 seconds
 security token mechanism
 */
+
+var every10seconds = setInterval(function(){
+
+}, 10000);
 
 function refreshPage(){
   document.getElementById("debug").innerHTML = "x:" + window.innerWidth + " y:" + window.innerHeight + " " + document.documentElement.clientWidth;
@@ -74,7 +75,7 @@ function refreshPage(){
 var counter = 0;
 
 
-// Create a connection to http://localhost:9999/echo
+// Create a connection to http://localhost:[same as web server]/echo
 var sock = new SockJS('/echo');
 
 // Open the connection

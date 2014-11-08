@@ -3,14 +3,14 @@
 save server and clients' ip addresses
 relay1 supports temperature and countdown mode
 auto open/close window with step motor
-PIR hardware adjust
-successful AC IRDA 
 voice control:  http://www.raspberrypi.org/meet-jasper-open-source-voice-computing/
 TTS: http://elinux.org/RPi_Text_to_Speech_(Speech_Synthesis)
 to query all significient events 
 to startup automatically (/etc/rc.local is now fail)
 //to shutdown -r now when disconnected for a long time
 client can control by command line with username=control message=predefined
+AC auto temperature adjustment 
+PIR hardware adjust
 */
 
 console.log(global);
@@ -169,6 +169,10 @@ setInterval(function() {
     }
   });
 
+  exec("vcgencmd measure_temp", function(error, stdout, stderr){
+    status.cpuTemperature = stdout;
+  });
+
   exec("ping -c 1 google.com ", function(error, stdout, stderr){
     if(error || stderr){
       status.internetFailure++;
@@ -318,7 +322,6 @@ var clone = function (obj) {
 
 // to write a LOG file
 var prevStatus = {}; // previous status
-var fs = require('fs');
 var LOG = function (obj) {
   if ( status.relay1 === prevStatus.relay1 
     && status.relay2 === prevStatus.relay2 
@@ -331,16 +334,14 @@ var LOG = function (obj) {
     prevStatus = clone(status);
     var string = JSON.stringify(obj);
     try {
-      fs.appendFile("./LOG2.txt", string + "\n", function(err) {
+      require('fs').appendFile("./LOG2.txt", string + "\n", function(err) {
         if(err) {
           console.log(err);
         } else {
           console.log("LOGed:" + string);
         }
       }); 
-    } catch (err) {
-      if (err) console.log(err);
-    } 
+    } catch (err) { if (err) console.log(err); } 
   }
 }
 

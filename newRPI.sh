@@ -1,7 +1,11 @@
 #!/bin/bash
 # for Raspberry PI updated: 201411 
+
 cat /proc/version
 cat /proc/cpuinfo
+vcgencmd measure_temp # show cpu temperature
+vcgencmd get_mem arm && vcgencmd get_mem gpu # show free memory for cpu & gpu
+
 echo please run sudo raspi-config manually before running this script.  Expand Filesystem and reboot
 sudo apt-get -y update
 sudo apt-get -y upgrade
