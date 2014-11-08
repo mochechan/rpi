@@ -21,8 +21,19 @@
     <strong id="relay2countdown" onclick="relay2setTime(this)">[0]</strong>
     </br>
     <dfn id="ac" onclick="ac(this)">ac</dfn>
-    <strong id="ac_on" onclick="ac_on(this)">ON</strong>
-    <strong id="ac_off" onclick="ac_off(this)">OFF</strong>
+    <strong id="ac_on" onclick="ac('ac_on')">ON</strong>
+    <strong id="ac_off" onclick="ac('ac_off')">OFF</strong>
+    <strong id="ac_to20" onclick="ac('ac_to20')">20</strong>
+    <strong id="ac_to21" onclick="ac('ac_to21')">21</strong>
+    <strong id="ac_to22" onclick="ac('ac_to22')">22</strong>
+    <strong id="ac_to23" onclick="ac('ac_to23')">23</strong>
+    <strong id="ac_to24" onclick="ac('ac_to24')">24</strong>
+    <strong id="ac_to25" onclick="ac('ac_to25')">25</strong>
+    <strong id="ac_to26" onclick="ac('ac_to26')">26</strong>
+    <strong id="ac_to27" onclick="ac('ac_to27')">27</strong>
+    <strong id="ac_to28" onclick="ac('ac_to28')">28</strong>
+    <strong id="ac_to29" onclick="ac('ac_to29')">29</strong>
+    <strong id="ac_to30" onclick="ac('ac_to30')">30</strong>
     </span>
 
     </br>
@@ -115,6 +126,20 @@ sock.onmessage = function(e) {
     document.getElementById("relay2countdown").innerHTML = "[" + Math.floor(content.relay2countdown/60) + ":" + (content.relay2countdown % 60) + "]";
   else if (content.relay2countdown == 0)
     document.getElementById("relay2countdown").innerHTML = "[0]";
+ 
+  if (content.lastACstatus === 'ac_on') refreshACstatus("ac_on");
+  if (content.lastACstatus === 'ac_off') refreshACstatus("ac_off");
+  if (content.lastACstatus === 'ac_to20') refreshACstatus("ac_to20");
+  if (content.lastACstatus === 'ac_to21') refreshACstatus("ac_to21");
+  if (content.lastACstatus === 'ac_to22') refreshACstatus("ac_to22");
+  if (content.lastACstatus === 'ac_to23') refreshACstatus("ac_to23");
+  if (content.lastACstatus === 'ac_to24') refreshACstatus("ac_to24");
+  if (content.lastACstatus === 'ac_to25') refreshACstatus("ac_to25");
+  if (content.lastACstatus === 'ac_to26') refreshACstatus("ac_to26");
+  if (content.lastACstatus === 'ac_to27') refreshACstatus("ac_to27");
+  if (content.lastACstatus === 'ac_to28') refreshACstatus("ac_to28");
+  if (content.lastACstatus === 'ac_to29') refreshACstatus("ac_to29");
+  if (content.lastACstatus === 'ac_to30') refreshACstatus("ac_to30");
 
   // Append the text to text area (using jQuery)
   if (content.username)
@@ -207,6 +232,43 @@ function relay2off(d) {
 function relay2setTime(d) {
   sock.send(JSON.stringify({request:"relay2countdown"}));
 }
+
+// for air condition 
+function ac (d) {
+  document.getElementById("ac_on").style.color = "black";
+  document.getElementById("ac_off").style.color = "black";
+  document.getElementById("ac_to20").style.color = "black";
+  document.getElementById("ac_to21").style.color = "black";
+  document.getElementById("ac_to22").style.color = "black";
+  document.getElementById("ac_to23").style.color = "black";
+  document.getElementById("ac_to24").style.color = "black";
+  document.getElementById("ac_to25").style.color = "black";
+  document.getElementById("ac_to26").style.color = "black";
+  document.getElementById("ac_to27").style.color = "black";
+  document.getElementById("ac_to28").style.color = "black";
+  document.getElementById("ac_to29").style.color = "black";
+  document.getElementById("ac_to30").style.color = "black";
+  document.getElementById(d).style.color = "red";
+  sock.send(JSON.stringify({request:d}));
+}
+
+function refreshACstatus (d) {
+  document.getElementById("ac_on").style.backgroundColor = "white";
+  document.getElementById("ac_off").style.backgroundColor = "white";
+  document.getElementById("ac_to20").style.backgroundColor = "white";
+  document.getElementById("ac_to21").style.backgroundColor = "white";
+  document.getElementById("ac_to22").style.backgroundColor = "white";
+  document.getElementById("ac_to23").style.backgroundColor = "white";
+  document.getElementById("ac_to24").style.backgroundColor = "white";
+  document.getElementById("ac_to25").style.backgroundColor = "white";
+  document.getElementById("ac_to26").style.backgroundColor = "white";
+  document.getElementById("ac_to27").style.backgroundColor = "white";
+  document.getElementById("ac_to28").style.backgroundColor = "white";
+  document.getElementById("ac_to29").style.backgroundColor = "white";
+  document.getElementById("ac_to30").style.backgroundColor = "white";
+  document.getElementById(d).style.backgroundColor = "yellow";
+}
+
 
 </script>
   </body>

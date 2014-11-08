@@ -77,7 +77,32 @@ echo.on('connection', function(conn) {
       relay2off();
     } else if (msg.request === 'relay2countdown') {
       status.relay2countdown += 10 * 60;
-    } else if (msg.request === "relay2mode") {
+    } else if (msg.request === "ac_on") {
+      ac("ac_on");
+    } else if (msg.request === "ac_off") {
+      ac("ac_off");
+    } else if (msg.request === "ac_to20") {
+      ac("ac_to20");
+    } else if (msg.request === "ac_to21") {
+      ac("ac_to21");
+    } else if (msg.request === "ac_to22") {
+      ac("ac_to22");
+    } else if (msg.request === "ac_to23") {
+      ac("ac_to23");
+    } else if (msg.request === "ac_to24") {
+      ac("ac_to24");
+    } else if (msg.request === "ac_to25") {
+      ac("ac_to25");
+    } else if (msg.request === "ac_to26") {
+      ac("ac_to26");
+    } else if (msg.request === "ac_to27") {
+      ac("ac_to27");
+    } else if (msg.request === "ac_to28") {
+      ac("ac_to28");
+    } else if (msg.request === "ac_to29") {
+      ac("ac_to29");
+    } else if (msg.request === "ac_to30") {
+      ac("ac_to30");
     } else {
       console.log("else error");
       console.log(message);
@@ -210,6 +235,11 @@ setInterval(function(){
   else if (status.flameGpio === "1") status.flame = "off";
   else status.flame = "error";
 
+  status.onlineClients = [];
+  for (var client in clients) {
+    status.onlineClients.push(clients[client].remoteAddress);
+  }
+
   broadcast(status);
   LOG(status);
 }, 1000 );
@@ -237,6 +267,25 @@ function relay2on () {
 function relay2off () {
   exec("gpio write 26 1", function (error, stdout, stderr) {});
   status.relay2countdown = 0;
+}
+
+function ac (action) {
+  console.log(action);
+  status.lastACstatus = action;
+  if (action === 'ac_on') exec("irsend SEND_ONCE lircd_ac.conf power_on", function (error, stdout, stderr) {});
+  else if (action === 'ac_off') exec("irsend SEND_ONCE lircd_ac.conf power_off", function (error, stdout, stderr) {});
+  else if (action === 'ac_to20') exec("irsend SEND_ONCE lircd_ac.conf to20", function (error, stdout, stderr) {});
+  else if (action === 'ac_to21') exec("irsend SEND_ONCE lircd_ac.conf to21", function (error, stdout, stderr) {});
+  else if (action === 'ac_to22') exec("irsend SEND_ONCE lircd_ac.conf to22", function (error, stdout, stderr) {});
+  else if (action === 'ac_to23') exec("irsend SEND_ONCE lircd_ac.conf to23", function (error, stdout, stderr) {});
+  else if (action === 'ac_to24') exec("irsend SEND_ONCE lircd_ac.conf to24", function (error, stdout, stderr) {});
+  else if (action === 'ac_to25') exec("irsend SEND_ONCE lircd_ac.conf to25", function (error, stdout, stderr) {});
+  else if (action === 'ac_to26') exec("irsend SEND_ONCE lircd_ac.conf to26", function (error, stdout, stderr) {});
+  else if (action === 'ac_to27') exec("irsend SEND_ONCE lircd_ac.conf to27", function (error, stdout, stderr) {});
+  else if (action === 'ac_to28') exec("irsend SEND_ONCE lircd_ac.conf to28", function (error, stdout, stderr) {});
+  else if (action === 'ac_to29') exec("irsend SEND_ONCE lircd_ac.conf to29", function (error, stdout, stderr) {});
+  else if (action === 'ac_to30') exec("irsend SEND_ONCE lircd_ac.conf to30", function (error, stdout, stderr) {});
+  else console.log("error: ac else error");
 }
 
 
