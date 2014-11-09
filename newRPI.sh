@@ -3,6 +3,8 @@
 
 cat /proc/version
 cat /proc/cpuinfo
+cat /proc/asound/cards # show all available sound cards 
+cat /proc/asound/modules # show all available sound modules
 vcgencmd measure_temp # show cpu temperature
 vcgencmd get_mem arm && vcgencmd get_mem gpu # show free memory for cpu & gpu
 
@@ -11,7 +13,9 @@ sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade 
 
-sudo apt-get -y install vim screen git nodejs npm git-core lirc rtorrent
+sudo apt-get -y install vim screen git git-core lirc rtorrent alsa-utils mplayer festival
+# nodejs installed from apt-get is very old.
+echo nolirc=yes | tee -a /etc/mplayer/mplayer.conf
 
 #sudo apt-get -y install python-pip 
 #sudo pip install pibrella

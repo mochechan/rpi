@@ -1,6 +1,7 @@
 /* todo:
 
 save server and clients' ip addresses
+AC auto temperature adjustment 
 relay1 supports temperature and countdown mode
 auto open/close window with step motor
 voice control:  http://www.raspberrypi.org/meet-jasper-open-source-voice-computing/
@@ -9,7 +10,6 @@ to query all significient events
 to startup automatically (/etc/rc.local is now fail)
 //to shutdown -r now when disconnected for a long time
 client can control by command line with username=control message=predefined
-AC auto temperature adjustment 
 PIR hardware adjust
 */
 
@@ -254,27 +254,32 @@ exec("gpio mode 29 in ; gpio mode 25 in ; gpio mode 22 out ; gpio mode 26 out ",
 });
 
 function relay1on () {
+  exec("./speech_google.sh I am going to trun on the relay one.", function (error, stdout, stderr) {});
   exec("gpio write 22 0", function (error, stdout, stderr) {});
   status.relay1countdown = 0;
 }
 
 function relay1off () {
+  exec("./speech_google.sh I am going to trun off the relay one.", function (error, stdout, stderr) {});
   exec("gpio write 22 1", function (error, stdout, stderr) {});
   status.relay1countdown = 0;
 }
 
 function relay2on () {
+  exec("./speech_google.sh I am going to trun on the relay 2.", function (error, stdout, stderr) {});
   exec("gpio write 26 0", function (error, stdout, stderr) {});
   status.relay2countdown = 0;
 }
 
 function relay2off () {
+  exec("./speech_google.sh I am going to trun off the relay 2.", function (error, stdout, stderr) {});
   exec("gpio write 26 1", function (error, stdout, stderr) {});
   status.relay2countdown = 0;
 }
 
 function ac (action) {
   console.log(action);
+  exec("./speech_google.sh I am going to manipulate the air condition.", function (error, stdout, stderr) {});
   status.lastACstatus = action;
   if (action === 'ac_on') exec("irsend SEND_ONCE lircd_ac.conf power_on", function (error, stdout, stderr) {});
   else if (action === 'ac_off') exec("irsend SEND_ONCE lircd_ac.conf power_off", function (error, stdout, stderr) {});
@@ -345,5 +350,11 @@ var LOG = function (obj) {
   }
 }
 
+/* current functions:
+2-way relay control
+IR LED and receiver; air condition tested
+web-based user interface with websocket
+Google's Text to Speech engine
+*/
 
 // end of file 
