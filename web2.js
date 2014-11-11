@@ -1,22 +1,33 @@
 /* todo:
-
-save server and clients' ip addresses
-AC auto temperature adjustment 
+configuration for both B and B+
+save server and all clients' ip addresses
+Air Condition: auto temperature adjustment 
 relay1 supports temperature and countdown mode
 auto open/close window with step motor
+
+3 different LEDs for indicators 
+
+voice control:
+1) Chinese input 2) Chinese/English/Japanese output 3) use google online api for quality 4) use USB sound card for input/output 
+http://blog.oscarliang.net/raspberry-pi-voice-recognition-works-like-siri/
 voice control:  http://www.raspberrypi.org/meet-jasper-open-source-voice-computing/
 TTS: http://elinux.org/RPi_Text_to_Speech_(Speech_Synthesis)
+http://programmermagazine.github.io/home/
+
 to query all significient events 
 to startup automatically (/etc/rc.local is now fail)
 //to shutdown -r now when disconnected for a long time
 client can control by command line with username=control message=predefined
 PIR hardware adjust
+
+
 */
 
 console.log(global);
 console.log(process);
 console.log(module);
-
+console.log(__filename);
+console.log(__dirname);
 
 // list of argv
 process.argv.forEach(function (val, index, array) {
@@ -24,29 +35,28 @@ process.argv.forEach(function (val, index, array) {
 });
 
 // to require some nodejs packages
-var util = require('util');
-var http = require("http");
+//var util = require('util');
 var exec = require('child_process').exec;
-var sockjs = require('sockjs'); // for web socket
-var node_static = require('node-static'); // for index.html
+
+var conf = {
+  gpioin: {flame1: "25", pir1: "29"},
+  gpioout: {relay1: "22", relay2: "26"},
+};
 
 var status = {};
 status.relay1countdown = status.relay2countdown = 0;
 status.internetSuccess = status.internetFailure = 0;
 
-// Clients list
-var clients = {};
+var clients = {}; // Clients list
 
 // Broadcast to all clients
 function broadcast(message){
-  for (var client in clients){
-    clients[client].write(JSON.stringify(message));
-  }
+  for (var client in clients) clients[client].write(JSON.stringify(message));
 }
 
 
 // create sockjs server
-var echo = sockjs.createServer();
+var echo = require('sockjs').createServer();
 
 // on new connection event
 echo.on('connection', function(conn) {
@@ -109,7 +119,6 @@ echo.on('connection', function(conn) {
       console.log(message.request);
     }
     broadcast(JSON.parse(message));
-
   });
 
   // on connection close event
@@ -121,15 +130,16 @@ echo.on('connection', function(conn) {
 });
 
 // Create an http server
-var server = http.createServer();
+var server = require('http').createServer();
 
 // 2. Static files server
+var node_static = require('node-static');
 var static_directory = new node_static.Server(__dirname);
 server.addListener('request', function(req, res) {
-    static_directory.serve(req, res);
+  static_directory.serve(req, res); //require('node-static').Server(__dirname).serve(req, res); // index.html
 });
 server.addListener('upgrade', function(req,res){
-    res.end();
+  res.end();
 });
 
 // Integrate SockJS and listen on /echo
@@ -171,14 +181,12 @@ setInterval(function() {
 
   exec("vcgencmd measure_temp", function(error, stdout, stderr){
     status.cpuTemperature = stdout;
+// todo: number part only
   });
 
   exec("ping -c 1 google.com ", function(error, stdout, stderr){
-    if(error || stderr){
-      status.internetFailure++;
-    } else {
-      status.internetSuccess++;
-    } 
+    if(error || stderr){ status.internetFailure++;
+    } else { status.internetSuccess++; } 
   });
 
 }, 12345);
@@ -297,6 +305,11 @@ function ac (action) {
   else console.log("error: ac else error");
 }
 
+var exe = function (cmd) {
+  exec(cmd, function (error, stdout, stderr) {
+     
+  });
+}
 
 // to get current timestamp
 function getDateTime() {
