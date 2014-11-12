@@ -20,7 +20,7 @@ to startup automatically (/etc/rc.local is now fail)
 client can control by command line with username=control message=predefined
 PIR hardware adjust
 
-
+miner bitcoin 
 */
 
 console.log(global);
@@ -229,7 +229,8 @@ setInterval(function(){
   } else {console.log("error:191");}
 
   status.username = "system";
-  status.timestamp = (new Date) + " #" + Object.keys(clients).length;
+  status.timestamp = (new Date().toUTCString());
+  status.concurrent_clients = Object.keys(clients).length;
 
   if (status.relay1gpio === "0") status.relay1 = "on";
   else if (status.relay1gpio === "1") status.relay1 = "off";
