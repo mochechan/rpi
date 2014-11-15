@@ -5,7 +5,6 @@
     <code id="status" style="font-size:28px">connectivity status</code></br>
     <code id="status-sensors" style="font-size:32px">sensor-status</code></br>
 
-
     <span id="btnGroup2" style="font-size:90px">
     <dfn id="fan" onclick="relay1(this)">fan</dfn>
     <strong id="button3" onclick="relay1on(this)">ON</strong>
@@ -34,10 +33,12 @@
     </span>
 
     </br>
+    </br>
+    Please ignore the following debug messages. 
     <p id="debug">for debug</p>
     <p id="debug2">for debug</p>
 
-    <textarea id="chat-content" style="width:400px;height:400px"></textarea><br/>
+    <textarea id="chat-content" style="width:400px;height:100px"></textarea><br/>
     <input type="text" id="username" name="" value="" placeholder="Choose username"/>
     <input type="text" id="message" name="" value="" placeholder="Enter chat message"/>
     <input type="button" id="send" name="" value="Send" onclick="sendMessage()"/>
@@ -62,9 +63,8 @@ ping server every 10 seconds
 security token mechanism
 */
 
-var every10seconds = setInterval(function(){
-
-}, 10000);
+var disconnectCounter = 0;
+var every1second;
 
 function refreshPage(){
   document.getElementById("debug").innerHTML = "x:" + window.innerWidth + " y:" + window.innerHeight + " " + document.documentElement.clientWidth;
@@ -89,6 +89,9 @@ sock.onclose = function() {
   document.getElementById("status").innerHTML = "disconnected";
   document.getElementById("status-sensors").innerHTML = "disconnected";
   //window.location.reload();
+  every1second = setInterval(function(){
+    document.getElementById("debug2").innerHTML = disconnectCounter++;
+  }, 1000);
 };
 
 // On receive message from server
@@ -146,7 +149,7 @@ sock.onmessage = function(e) {
   if (content.username)
     $('#chat-content').val(function(i, text){
       //return text + 'User ' + content.username + ': ' + content.message + '\n';
-      return text + JSON.stringify(content) + '\n';
+      return JSON.stringify(content) + '\n';
     });
   var log = document.getElementById("chat-content");
   log.scrollTop = log.scrollHeight;
