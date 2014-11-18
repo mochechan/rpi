@@ -26,6 +26,7 @@ plot H/T figures
 ultrasonic sensor / smell sensor
 to list last 5 events 
 humidity and temperature sensor with sudo
+sg90 servo http://abyz.co.uk/rpi/pigpio/sitemap.html
 
 3 different LEDs for indicators 
 
