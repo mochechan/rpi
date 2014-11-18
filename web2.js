@@ -1,11 +1,17 @@
 var conf = {
   httpPort: 8080,
-  gpioIn: {flame1: "25", pir1: "29"}, 
+  gpioIn: {flame1: "25", pir1: "29", gas1: "28"}, 
   gpioOut: {relay1: "22", relay2: "26"}, 
   gpioNot: {lircIn: "4", lircOut: "3", HT: "7", }, 
 //Do not include any sensor gpio pin which is never controlled by this script: 1) LIRC controlled IR emitter and IR sensor; 2) humidity and temperature sensor; 3) 
 
 };
+
+//to enumerate conf
+Object.keys(conf).forEach(function (val, index, array) {
+  console.log( ' argv' + index + ': ' + val + " " + (typeof conf) );
+});
+
 
 /* todo:
 configuration for both B and B+
@@ -41,16 +47,19 @@ need HW: 10 LEDs, sound amplifer * 2,
 
 */
 
-console.log(global);
-console.log(process);
-console.log(module);
-console.log(__filename);
-console.log(__dirname);
+//dump all system variables
+//console.log(global);
+//console.log(process);
+//console.log(module);
+//console.log(__filename);
+//console.log(__dirname);
+
 
 // list of argv
 process.argv.forEach(function (val, index, array) {
   console.log( ' argv' + index + ': ' + val + " " );
 });
+
 
 // to require some nodejs packages
 //var util = require('util');
@@ -68,6 +77,7 @@ status.internetSuccess = status.internetFailure = 0;
 
 var clients = {}; // Clients list
 
+
 // Broadcast to all clients
 function broadcast(message){
   for (var client in clients) {
@@ -81,7 +91,7 @@ var echo = require('sockjs').createServer();
 
 // on new connection event
 echo.on('connection', function(conn) {
-  console.log(conn.remoteAddress + ":" + conn.remotePort + " " + conn.headers.host);
+  console.log("sockjs echo.on connection " + conn.remoteAddress + ":" + conn.remotePort + " " + conn.headers.host);
 
   // add this client to clients object
   console.log("on connection " + conn.id );
@@ -89,7 +99,7 @@ echo.on('connection', function(conn) {
 
   // on receive new data from client event
   conn.on('data', function(message) {
-    console.log("on data " + conn.id + message);
+    console.log("sockjs conn.on data " + conn.id + message);
     var msg = JSON.parse(message);
 
     switch (msg.request) {
@@ -169,7 +179,7 @@ echo.on('connection', function(conn) {
 
   // on connection close event
   conn.on('close', function() {
-    console.log("on close " + conn.id );
+    console.log("sockjs conn.on close " + conn.id );
     delete clients[conn.id];
   });
 
@@ -513,13 +523,17 @@ var LOG = function (obj) {
   }
 }
 
+
 // read command line from console
 var rl = require('readline').createInterface({input: process.stdin, output: process.stdout});
-rl.setPrompt('hello,status,quit>');
+rl.setPrompt('conf,hello,status,quit>');
 rl.prompt();
 
 rl.on('line', function(line) {
   switch(line.trim()) {
+    case 'conf':
+      console.log(conf);
+      break;
     case 'hello':
       console.log('world!');
       break;
