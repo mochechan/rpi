@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 # for Raspberry PI updated: 201411 
 
 cat /proc/version
@@ -14,14 +14,16 @@ sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade 
 
 sudo apt-get -y install vim screen git git-core lirc rtorrent alsa-utils mplayer festival
-# nodejs installed from apt-get is very old.
+# nodejs should be install manually because nodejs installed from apt-get is very old.
 echo nolirc=yes | tee -a /etc/mplayer/mplayer.conf
 
+# already refactor to *.sh 
 #sudo apt-get -y install python-pip 
 #sudo pip install pibrella
 #sudo apt-get -y install python3-pip
 #sudo pip-3.2 install pibrella
 
+# driver for rpi gpio 
 cd /home/pi
 echo installing wiringPi 
 git clone git://git.drogon.net/wiringPi

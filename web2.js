@@ -15,16 +15,17 @@ Object.keys(conf).forEach(function (val, index, array) {
 
 /* todo:
 configuration for both B and B+
-save server and all clients' ip addresses
+to save server and all clients' ip addresses
 Air Condition: auto temperature adjustment 
 usb 5V -> dubon line out 
 relay1 supports temperature and countdown mode
 auto open/close window with step motor
 dump first 10 lines of log file at startup
-construct lircd.conf by web-based UI: use mode2 to convert 
+to construct lircd.conf by web-based UI: use mode2 to convert 
 plot H/T figures
 ultrasonic sensor / smell sensor
 to list last 5 events 
+humidity and temperature sensor with sudo
 
 3 different LEDs for indicators 
 

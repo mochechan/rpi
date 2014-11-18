@@ -1,0 +1,6 @@
+
+modprobe lirc_rpi
+screen -dmS airplay /home/pi/airpilay/shairport/shairport.pl -a RayPi
+amixer set -- PCM 1000
+(cd /home/pi/rpi ; screen -d -m -S web2 node web2.js)
+
