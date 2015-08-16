@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head> <meta charset="UTF-8"/> <title>vehicle</title> </head>
+  <body onload="bodyOnLoad()">
+Raspberry PI vehicle 
+	</br>
+	</br>
+
+    <strong onmousedown="sockSend('forward')" onmouseup="sockSend('forward_stop')">#######forward#######</strong>
+<table border="1">
+  <tr>
+    <td><strong onmousedown="sockSend('left_forward')" onmouseup="sockSend('left_forward_stop')">left_forward</strong></td>
+    <td><strong onmousedown="sockSend('right_forward')" onmouseup="sockSend('right_forward_stop')">right_forward</strong></td>		
+  </tr>
+  <tr>
+    <td><strong onmousedown="sockSend('left_backward')" onmouseup="sockSend('left_backward_stop')">left_backward</strong></td>
+    <td><strong onmousedown="sockSend('right_backward')" onmouseup="sockSend('right_backward_stop')">right_backward</strong></td>		
+  </tr>
+</table>
+    <strong onmousedown="sockSend('backward')" onmouseup="sockSend('backward_stop')">#######backward#######</strong>
+    </br>
+    </br>
+    </br>
+    <strong onmousedown="sockSend('stop')" onmouseup="sockSend('stop')">stop all</strong>
+    </br>
+    </br>
+    </br>
+
+<table border="1">
+  <tr>
+    <strong onmousedown="sockSend('forward')" onmouseup="sockSend('forward_stop')">#######forward#######</strong>
+    <td><strong onmousedown="sockSend('clockwise')" onmouseup="sockSend('stop')">clockwise</strong></td>
+    <td><strong onmousedown="sockSend('counterclockwise')" onmouseup="sockSend('stop')">counterclockwise</strong></td>		
+  </tr>
+</table>
+    <strong onmousedown="sockSend('backward')" onmouseup="sockSend('backward_stop')">#######backward#######</strong>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script>
+var arrowing = false;
+document.onkeydown = function checkKey(e) { 
+    e = e || window.event; 
+	if (arrowing) return;
+	switch (e.keyCode) {
+    		case 38:
+        		// up arrow
+			console.log("onkeydown:up");
+			sockSend("forward");
+		break;
+    		case 40:
+		        // down arrow
+			console.log("onkeydown:down");
+			sockSend("backward");
+		break;
+    		case 37:
+		       // left arrow
+			console.log("onkeydown:left");
+			sockSend("counterclockwise");
+		break;
+    		case 39:
+		       // right arrow
+			console.log("onkeydown:right");
+			sockSend("clockwise");
+		break;
+		default:
+			console.log(e.keyCode);
+		break;
+    	}
+	arrowing = true;
+}
+
+document.onkeyup = function checkKey(e) { 
+	sockSend("stop");
+	arrowing = false;
+    e = e || window.event; 
+    if (e.keyCode == '38') {
+        // up arrow
+	console.log("onkeyup:up");
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+	console.log("onkeyup:down");
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+	console.log("onkeyup:left");
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+	console.log("onkeyup:right");
+    }
+}
+
+// Create a connection to http://localhost:[same as web server]/echo
+var sock = new SockJS('/echo');
+
+// Open the connection
+sock.onopen = function() {
+  console.log('sock open');
+};
+
+// On connection close
+sock.onclose = function() {
+  console.log('sock close');
+};
+
+// On receive message from server
+sock.onmessage = function(e) {
+  // Get the content
+  var content = JSON.parse(e.data);
+   //console.log(content); 
+};
+
+
+function sockSend(d) {
+  sock.send(JSON.stringify({require: d}));
+}
+
+
+</script>
+  </body>
+</html>
