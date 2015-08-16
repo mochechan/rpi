@@ -1,0 +1,180 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'mocha' ]
+2 info using npm@2.5.1
+3 info using node@v0.12.0
+4 silly cache add args [ 'mocha', null ]
+5 verbose cache add spec mocha
+6 silly cache add parsed spec { raw: 'mocha',
+6 silly cache add   scope: null,
+6 silly cache add   name: 'mocha',
+6 silly cache add   rawSpec: '',
+6 silly cache add   spec: '*',
+6 silly cache add   type: 'range' }
+7 verbose addNamed mocha@*
+8 silly addNamed semver.valid null
+9 silly addNamed semver.validRange *
+10 silly addNameRange { name: 'mocha', range: '*', hasData: false }
+11 silly mapToRegistry name mocha
+12 silly mapToRegistry using default registry
+13 silly mapToRegistry registry https://registry.npmjs.org/
+14 silly mapToRegistry uri https://registry.npmjs.org/mocha
+15 verbose addNameRange registry:https://registry.npmjs.org/mocha not in flight; fetching
+16 verbose request uri https://registry.npmjs.org/mocha
+17 verbose request no auth needed
+18 info attempt registry request try #1 at 03:28:27
+19 verbose request id 8b7574d29607290b
+20 verbose etag "9LYR452BMBWW56PQGHT1CL6LL"
+21 http request GET https://registry.npmjs.org/mocha
+22 http 304 https://registry.npmjs.org/mocha
+23 silly get cb [ 304,
+23 silly get   { date: 'Wed, 25 Mar 2015 03:28:28 GMT',
+23 silly get     server: 'Apache',
+23 silly get     via: '1.1 varnish',
+23 silly get     'last-modified': 'Wed, 25 Mar 2015 03:27:52 GMT',
+23 silly get     'cache-control': 'max-age=60',
+23 silly get     etag: '"9LYR452BMBWW56PQGHT1CL6LL"',
+23 silly get     age: '36',
+23 silly get     'x-served-by': 'cache-nrt6121-NRT',
+23 silly get     'x-cache': 'HIT',
+23 silly get     'x-cache-hits': '2',
+23 silly get     'x-timer': 'S1427254108.283555,VS0,VE0',
+23 silly get     vary: 'Accept',
+23 silly get     'content-length': '0',
+23 silly get     'keep-alive': 'timeout=10, max=50',
+23 silly get     connection: 'Keep-Alive' } ]
+24 verbose etag https://registry.npmjs.org/mocha from cache
+25 verbose get saving mocha to /root/.npm/registry.npmjs.org/mocha/.cache.json
+26 silly addNameRange number 2 { name: 'mocha', range: '*', hasData: true }
+27 silly addNameRange versions [ 'mocha',
+27 silly addNameRange   [ '0.0.1-alpha1',
+27 silly addNameRange     '0.0.1-alpha2',
+27 silly addNameRange     '0.0.1-alpha3',
+27 silly addNameRange     '0.0.1-alpha4',
+27 silly addNameRange     '0.0.1-alpha5',
+27 silly addNameRange     '0.0.1-alpha6',
+27 silly addNameRange     '0.0.1',
+27 silly addNameRange     '0.0.2',
+27 silly addNameRange     '0.0.3',
+27 silly addNameRange     '0.0.4',
+27 silly addNameRange     '0.0.5',
+27 silly addNameRange     '0.0.6',
+27 silly addNameRange     '0.0.7',
+27 silly addNameRange     '0.0.8',
+27 silly addNameRange     '0.1.0',
+27 silly addNameRange     '0.2.0',
+27 silly addNameRange     '0.3.0',
+27 silly addNameRange     '0.3.1',
+27 silly addNameRange     '0.3.2',
+27 silly addNameRange     '0.3.3',
+27 silly addNameRange     '0.3.4',
+27 silly addNameRange     '0.3.6',
+27 silly addNameRange     '0.4.0',
+27 silly addNameRange     '0.5.0',
+27 silly addNameRange     '0.6.0',
+27 silly addNameRange     '0.7.0',
+27 silly addNameRange     '0.7.1',
+27 silly addNameRange     '0.8.0',
+27 silly addNameRange     '0.8.1',
+27 silly addNameRange     '0.9.0',
+27 silly addNameRange     '0.10.0',
+27 silly addNameRange     '0.10.1',
+27 silly addNameRange     '0.10.2',
+27 silly addNameRange     '0.11.0',
+27 silly addNameRange     '0.12.0',
+27 silly addNameRange     '0.12.1',
+27 silly addNameRange     '0.13.0',
+27 silly addNameRange     '0.14.0',
+27 silly addNameRange     '0.14.1',
+27 silly addNameRange     '1.0.0',
+27 silly addNameRange     '1.0.1',
+27 silly addNameRange     '1.0.2',
+27 silly addNameRange     '1.0.3',
+27 silly addNameRange     '1.1.0',
+27 silly addNameRange     '1.2.0',
+27 silly addNameRange     '1.2.1',
+27 silly addNameRange     '1.2.2',
+27 silly addNameRange     '1.3.0',
+27 silly addNameRange     '1.3.1',
+27 silly addNameRange     '1.3.2',
+27 silly addNameRange     '1.4.0',
+27 silly addNameRange     '1.4.1',
+27 silly addNameRange     '1.4.2',
+27 silly addNameRange     '1.4.3',
+27 silly addNameRange     '1.5.0',
+27 silly addNameRange     '1.6.0',
+27 silly addNameRange     '1.7.0',
+27 silly addNameRange     '1.7.1',
+27 silly addNameRange     '1.7.2',
+27 silly addNameRange     '1.7.3',
+27 silly addNameRange     '1.7.4',
+27 silly addNameRange     '1.8.0',
+27 silly addNameRange     '1.8.1',
+27 silly addNameRange     '1.8.2',
+27 silly addNameRange     '1.9.0',
+27 silly addNameRange     '1.10.0',
+27 silly addNameRange     '1.11.0',
+27 silly addNameRange     '1.12.0',
+27 silly addNameRange     '1.12.1',
+27 silly addNameRange     '1.13.0',
+27 silly addNameRange     '1.14.0',
+27 silly addNameRange     '1.15.0',
+27 silly addNameRange     '1.15.1',
+27 silly addNameRange     '1.16.0',
+27 silly addNameRange     '1.16.1',
+27 silly addNameRange     '1.16.2',
+27 silly addNameRange     '1.17.0',
+27 silly addNameRange     '1.17.1',
+27 silly addNameRange     '1.18.0',
+27 silly addNameRange     '1.18.1',
+27 silly addNameRange     '1.18.2',
+27 silly addNameRange     '1.19.0',
+27 silly addNameRange     '1.20.0',
+27 silly addNameRange     '1.20.1',
+27 silly addNameRange     '1.21.0',
+27 silly addNameRange     '1.21.1',
+27 silly addNameRange     '1.21.2',
+27 silly addNameRange     '1.21.3',
+27 silly addNameRange     '1.21.4',
+27 silly addNameRange     '1.21.5',
+27 silly addNameRange     '2.0.0',
+27 silly addNameRange     '2.0.1',
+27 silly addNameRange     '2.1.0',
+27 silly addNameRange     '2.2.0',
+27 silly addNameRange     '2.2.1' ] ]
+28 verbose addNamed mocha@2.2.1
+29 silly addNamed semver.valid 2.2.1
+30 silly addNamed semver.validRange 2.2.1
+31 silly mapToRegistry name mocha
+32 silly mapToRegistry using default registry
+33 silly mapToRegistry registry https://registry.npmjs.org/
+34 silly mapToRegistry uri https://registry.npmjs.org/mocha
+35 verbose addRemoteTarball https://registry.npmjs.org/mocha/-/mocha-2.2.1.tgz not in flight; adding
+36 verbose addRemoteTarball [ 'https://registry.npmjs.org/mocha/-/mocha-2.2.1.tgz',
+36 verbose addRemoteTarball   '04a2f8aeb149fe50177e00a7ef5d08c639e9126b' ]
+37 info retry fetch attempt 1 at 03:28:28
+38 info attempt registry request try #1 at 03:28:28
+39 http fetch GET https://registry.npmjs.org/mocha/-/mocha-2.2.1.tgz
+40 http fetch 200 https://registry.npmjs.org/mocha/-/mocha-2.2.1.tgz
+41 verbose stack Error: Uncaught, unspecified "error" event.
+41 verbose stack     at Error (native)
+41 verbose stack     at emit (events.js:87:13)
+41 verbose stack     at cleanupSync (/usr/local/lib/node_modules/npm/node_modules/fs-write-stream-atomic/index.js:46:42)
+41 verbose stack     at WriteStream.emit (/usr/local/lib/node_modules/npm/node_modules/fs-write-stream-atomic/index.js:53:12)
+41 verbose stack     at onwriteError (_stream_writable.js:317:10)
+41 verbose stack     at onwrite (_stream_writable.js:335:5)
+41 verbose stack     at WritableState.onwrite (_stream_writable.js:105:5)
+41 verbose stack     at evalmachine.<anonymous>:1800:14
+41 verbose stack     at FSReqWrap.strWrapper (evalmachine.<anonymous>:570:5)
+42 verbose cwd /root/rpi
+43 error Linux 3.18.7+
+44 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "mocha"
+45 error node v0.12.0
+46 error npm  v2.5.1
+47 error Uncaught, unspecified "error" event.
+48 error If you need help, you may report this error at:
+48 error     <http://github.com/npm/npm/issues>
+49 verbose exit [ 1, true ]

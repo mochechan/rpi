@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head> <meta charset="UTF-8"/> <title>sockjs RPI 繁體中文</title> </head>
+  <head> <meta charset="UTF-8"/> <title>sockjsRPI</title> </head>
+<style>
+#videoCanvas {
+			/* Always stretch the canvas to 640x480, regardless of its internal size. */
+			width: 704px;
+			height: 576px;
+		}
+</style>
   <body onload="bodyOnLoad()">
     <code id="status" style="font-size:28px">connectivity status</code></br>
     <code id="status-sensors" style="font-size:32px">sensor-status</code></br>
@@ -30,10 +37,64 @@
     <strong id="ac_to28" onclick="ac('ac_to28')">28</strong>
     <strong id="ac_to29" onclick="ac('ac_to29')">29</strong>
     <strong id="ac_to30" onclick="ac('ac_to30')">30</strong>
+    <strong id="ac_auto" onclick="ac('ac_auto')">ac_auto(xx)</strong>
+    <hr>
+    RC30
+    <strong id="RC30_power" onclick="irsend('RC30_power')">power</strong>
+    <strong id="RC30_mute" onclick="irsend('RC30_mute')">mute</strong>
+    <strong id="RC30_volume_plus1" onclick="irsend('RC30_volume_plus1')">volume+</strong>
+    <strong id="RC30_volume_plus2" onclick="irsend('RC30_volume_plus2')">volume+</strong>
+    <strong id="RC30_volume_minus1" onclick="irsend('RC30_volume_minus1')">volume-</strong>
+    <strong id="RC30_volume_minus2" onclick="irsend('RC30_volume_minus2')">volume-</strong>
+    <strong id="RC30_pc" onclick="irsend('RC30_pc')">pc</strong>
+    <strong id="RC30_aux" onclick="irsend('RC30_aux')">aux</strong>
+    <strong id="RC30_tre_plus" onclick="irsend('RC30_tre_plus')">tre+</strong>
+    <strong id="RC30_tre_minus" onclick="irsend('RC30_tre_minus')">tre-</strong>
+    <strong id="RC30_sw_plus" onclick="irsend('RC30_sw_plus')">sw+</strong>
+    <strong id="RC30_sw_minus" onclick="irsend('RC30_sw_minus')">sw-</strong>
+    <hr>
+	amplifer 
+    <strong id="amp_on" onclick="irsend('amp_on')">on</strong>
+    <strong id="amp_off" onclick="irsend('amp_off')">off</strong>
     </span>
+	<hr>
+    <input type=text id="alarm_schedule" value="" placeholder="alarm schedule" style="width:345px;font-size:50px"/> 
+    <input type=text id="alarm_message" value="" placeholder="alarm message" style="width:345px;font-size:50px"/> 
+    </br>
+    </br>
 
+	<!-- The Canvas size specified here is the "initial" internal resolution. jsmpeg will
+		change this internal resolution to whatever the source provides. The size the
+		canvas is displayed on the website is dictated by the CSS style.
+	-->
+	<canvas id="videoCanvas" width="352" height="288" >
+		<p>
+			Please use a browser that supports the Canvas Element, like
+			<a href="http://www.google.com/chrome">Chrome</a>,
+			<a href="http://www.mozilla.com/firefox/">Firefox</a>,
+			<a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+		</p>
+	</canvas>
     </br>
+    <strong id="VideoOff" onclick="request('videoOff')" style="font-size:90px">OFF</strong>
+    <strong id="VideoOn" onclick="request('videoOn')" style="font-size:90px">ON</strong>
     </br>
+	<script type="text/javascript" src="jsmpg.js"></script>
+	<script type="text/javascript">
+		// Show loading notice
+		var canvas = document.getElementById('videoCanvas');
+		var ctx = canvas.getContext('2d');
+		ctx.fillStyle = '#444';
+		ctx.fillText('Loading...', canvas.width/2-30, canvas.height/3);
+
+		// Setup the WebSocket connection and start the player
+		var client = new WebSocket( 'ws://' + location.hostname + ':8084/' );
+		//var client = new WebSocket( 'ws://192.168.0.15:8084/' );
+		var player = new jsmpeg(client, {canvas:canvas});
+	</script>
+    </br>
+
+
     Please ignore the following debug messages. 
     <p id="debug">for debug</p>
     <p id="debug2">for debug</p>
@@ -49,6 +110,13 @@
     <strong id="button2" onclick="button2(this)">Button2按鈕二</strong>
     </span>
     </br>
+    
+    <strong id="buttonLeftForward" style="font-size:300px">&#x2191;</strong>
+    <strong id="buttonRightForward" style="font-size:300px">&#x2191;</strong>
+    </br>
+    <strong id="buttonLeftForward" style="font-size:300px">&#x2193;</strong>
+    <strong id="buttonRightForward" style="font-size:300px">&#x2193;</strong>
+    </br>
 
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
@@ -62,6 +130,14 @@ auto-scale by screen size
 ping server every 10 seconds
 security token mechanism
 */
+
+window.onload = function() {
+    $("#buttonLeftForward").bind('touchstart', function(){
+        document.getElementById("buttonLeftForward").style.color = "red";
+    }).bind('touchend', function(){
+        document.getElementById("buttonLeftForward").style.color = "black";
+    });
+}
 
 var disconnectCounter = 0;
 var every1second;
@@ -131,19 +207,20 @@ sock.onmessage = function(e) {
   else if (content.relay2countdown == 0)
     document.getElementById("relay2countdown").innerHTML = "[0]";
  
-  if (content.lastACstatus === 'ac_on') refreshACstatus("ac_on");
-  if (content.lastACstatus === 'ac_off') refreshACstatus("ac_off");
-  if (content.lastACstatus === 'ac_to20') refreshACstatus("ac_to20");
-  if (content.lastACstatus === 'ac_to21') refreshACstatus("ac_to21");
-  if (content.lastACstatus === 'ac_to22') refreshACstatus("ac_to22");
-  if (content.lastACstatus === 'ac_to23') refreshACstatus("ac_to23");
-  if (content.lastACstatus === 'ac_to24') refreshACstatus("ac_to24");
-  if (content.lastACstatus === 'ac_to25') refreshACstatus("ac_to25");
-  if (content.lastACstatus === 'ac_to26') refreshACstatus("ac_to26");
-  if (content.lastACstatus === 'ac_to27') refreshACstatus("ac_to27");
-  if (content.lastACstatus === 'ac_to28') refreshACstatus("ac_to28");
-  if (content.lastACstatus === 'ac_to29') refreshACstatus("ac_to29");
-  if (content.lastACstatus === 'ac_to30') refreshACstatus("ac_to30");
+  if (content.ac.lastManual === 'ac_on') refreshACstatus("ac_on");
+  if (content.ac.lastManual === 'ac_off') refreshACstatus("ac_off");
+  if (content.ac.lastManual === 'ac_to20') refreshACstatus("ac_to20");
+  if (content.ac.lastManual === 'ac_to21') refreshACstatus("ac_to21");
+  if (content.ac.lastManual === 'ac_to22') refreshACstatus("ac_to22");
+  if (content.ac.lastManual === 'ac_to23') refreshACstatus("ac_to23");
+  if (content.ac.lastManual === 'ac_to24') refreshACstatus("ac_to24");
+  if (content.ac.lastManual === 'ac_to25') refreshACstatus("ac_to25");
+  if (content.ac.lastManual === 'ac_to26') refreshACstatus("ac_to26");
+  if (content.ac.lastManual === 'ac_to27') refreshACstatus("ac_to27");
+  if (content.ac.lastManual === 'ac_to28') refreshACstatus("ac_to28");
+  if (content.ac.lastManual === 'ac_to29') refreshACstatus("ac_to29");
+  if (content.ac.lastManual === 'ac_to30') refreshACstatus("ac_to30");
+  if (content.ac.lastManual === 'ac_auto') refreshACstatus("ac_auto");
 
   // Append the text to text area (using jQuery)
   if (content.username)
@@ -237,8 +314,17 @@ function relay2setTime(d) {
   sock.send(JSON.stringify({request:"relay2countdown"}));
 }
 
+function irsend (d) {
+  sock.send(JSON.stringify({request:d}));
+}
+
+function request (d) {
+	sock.send(JSON.stringify({request:d}));
+}
+
 // for air condition 
 function ac (d) {
+  document.getElementById("ac_auto").style.color = "black";
   document.getElementById("ac_on").style.color = "black";
   document.getElementById("ac_off").style.color = "black";
   document.getElementById("ac_to20").style.color = "black";
@@ -257,6 +343,7 @@ function ac (d) {
 }
 
 function refreshACstatus (d) {
+  document.getElementById("ac_auto").style.backgroundColor = "white";
   document.getElementById("ac_on").style.backgroundColor = "white";
   document.getElementById("ac_off").style.backgroundColor = "white";
   document.getElementById("ac_to20").style.backgroundColor = "white";
